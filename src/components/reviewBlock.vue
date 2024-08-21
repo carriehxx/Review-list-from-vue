@@ -420,7 +420,7 @@ import modal from './review/modal.vue'
 
     .replyForm {
         flex-direction: column;
-        width: 100%;
+        /* width: 100%; */
         height: auto;
         justify-content: center;
         align-items: start;
