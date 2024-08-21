@@ -4,6 +4,7 @@
     const props = defineProps ({
         show: Boolean,
         purpose: String
+        
     })
 </script>
 
@@ -73,38 +74,48 @@
     }
 
     .modal-container {
-        width: 300px;
+        width: 350px;
         margin: auto;
         padding: 20px 30px;
         background-color: #fff;
-        border-radius: 2px;
+        border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
         transition: all 0.3s ease;
     }
 
     .modal-header h3 {
         margin-top: 0;
-        color: gray;
+        color: var(--clr-dark-blue);
     }
 
     .modal-body {
         margin: 20px 0;
+        text-align: justify
     }
 
     .modal-footer {
         display: flex;
         flex: 1;
         gap: 1rem;
+        justify-content: center;
+    }
+
+    .modal-footer button {
+        width: 50%;
+    }
+
+    .modal-footer button:hover {
+        scale: 1.05;
     }
 
     .cancel {
-        background-color: gray;
-        color: azure;
+        background-color: var( --clr-grayish-blue);
+        color: white;
     }
 
     .deleteReview {
-        background-color: lightcoral;
-        color: azure;
+        background-color: var(--clr-soft-red);
+        color: white;
     }
 
     .modal-enter-from {
@@ -120,5 +131,14 @@
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
     }
+
+@media screen and (max-width: 800px) {
+    .modal-container {
+        width: 80vw;
+    }
+    .modal-body {
+        text-align: left;
+    }
+}
 
 </style>

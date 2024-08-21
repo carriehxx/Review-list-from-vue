@@ -2,11 +2,12 @@
 
 <script setup>
     import { ref } from 'vue';
-    
+
     const props = defineProps({
         reviews: Object,
         currentUser: Object,
-        totalReviewNum: Number
+        totalReviewNum: Number,
+        isMobile:Boolean
     });
 
     const emit = defineEmits(['updateTotalReviewNum','updateState']);
@@ -33,14 +34,12 @@
                 "replies": []
             };
             
-        if (props.reviews.replies) {
-            props.reviews.replies.push(newReplyReview);
-        } else {
-            props.reviews.replies = [newReplyReview]; 
-        }
-
-            
-            // update the total review number
+            if (props.reviews.replies) {
+                props.reviews.replies.push(newReplyReview);
+            } else {
+                props.reviews.replies = [newReplyReview]; 
+            };
+    
             emit('updateTotalReviewNum', props.totalReviewNum + 1 );
             emit('updateState', true)
         };
@@ -49,36 +48,59 @@
 </script>
 
 <template>
-    <div  @click.stop>
+    <div  @click.stop v-if="!isMobile">
         <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
-        <input @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Please write your comment here ...">
+        <textarea
+            @keyup.enter="submitMsg" 
+            type="text" 
+            class="commentInput" 
+            v-model.trim="inputMsg" >
+        </textarea>
         <button @click.stop="submitMsg" class="reply">REPLY</button>
+    </div>
+
+    <div  @click.stop v-else>
+        <textarea
+            @keyup.enter="submitMsg" 
+            type="text" 
+            class="commentInput" 
+            v-model.trim="inputMsg" >
+        </textarea>
+        <div class="bottom">
+            <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+            <button @click.stop="submitMsg" class="reply">REPLY</button>
+        </div>
     </div>
 </template>
 
 <style scoped>
 .commentInput {
-    height: 80%;
+    min-height: 5vh;
+    height: 100%;
     flex: 1;
-    /* border-radius: 10px; */
     padding: 1rem;
     cursor: pointer;
-}
-
-.commentInput::placeholder {
-    /* flex: 1; */
-    color: rgb(159, 159, 211);
-    /* display: flex; */
-    font-size: 1rem;
-    line-height: 1.5;
+    justify-content: start;
+    align-items: start;
+    border-color: var(--clr-Vlight-gra);
+    box-shadow: 0 0 1px 0;
 }
 
 .reply {
-    background-color: rgb(94, 28, 155);
-    padding: 1rem;
-    width: 8rem;
-    color: azure;
+    background-color: var(--clr-moderate-blue);
+    padding: 1.2rem;
+    color: white;
 }
 
+@media screen and (max-width: 800px) {
+    .commentInput {
+        text-align: left;
+        height: auto;
+        width: 100%;
+    }
+    .reply {
+        padding: .5rem 1.2rem;
+    }
+}
 
 </style>

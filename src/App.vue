@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted} from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import treeReview from './components/treeReview.vue';
 import newReview from './components/newReview.vue';
 import datastore from './assets/data.json';
@@ -10,9 +10,7 @@ const dataStore = ref({
 });
 dataStore.value = datastore;
 
-// 计算所有评论数量
 const totalReviewNum = ref(0);
-
 function allReviews(dataset) {
   if (!dataset || dataset.length === 0) {
     return 0;
@@ -27,13 +25,29 @@ function allReviews(dataset) {
   return total;
 }
 
-onMounted(() => {
-  totalReviewNum.value = allReviews(dataStore.value.comments)
-});
+
 
 function updateTotalReviewNum(newTotal) {
   totalReviewNum.value = newTotal;
 }
+
+
+// checking the screen size to make corresponding layout change
+const isMobile = ref(window.innerWidth < 800);
+
+const updateLayout = () => {
+  isMobile.value = window.innerWidth < 800;
+  };
+
+onMounted(() => {
+  totalReviewNum.value = allReviews(dataStore.value.comments)
+  window.addEventListener('resize', updateLayout);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateLayout);
+});
+
 </script>
 
 <template>
@@ -41,10 +55,11 @@ function updateTotalReviewNum(newTotal) {
     <ul class="reviewContainer">
       <li class="primary-review" v-for="mainReview in dataStore.comments" :key="mainReview.id">
         <treeReview
-          class="replyBlocks"
+          class="reviewBlocks"
           :reviews="mainReview"
           :currentUser="dataStore.currentUser"
-          :totalReviewNum="totalReviewNum"
+          :totalReviewNum="totalReviewNum" 
+          :isMobile="isMobile"
           @updateTotalReviewNum="updateTotalReviewNum"
         ></treeReview>
       </li>
@@ -53,41 +68,53 @@ function updateTotalReviewNum(newTotal) {
         :reviews="dataStore.comments"
         :currentUser="dataStore.currentUser"
         :totalReviewNum="totalReviewNum"
+        :isMobile="isMobile"
         @updateTotalReviewNum="updateTotalReviewNum"
       ></newReview>
     </ul>
   </div>
 </template>
 
+
+
 <style scoped>
-
-.main-page {
-  padding: 2rem 0rem;
-  width: clamp(300px, 60vw, 800px);
-  display: flex;
-  flex-direction: column;
-  /* flex: 1; */
-}
-
-.primary-review,
-.sendReview {
-  list-style: none;
-}
-
 .reviewContainer {
+  list-style-type: none;
+  padding-inline-start: 0%;
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: .5rem;
+}
+
+.primary-review {
+  padding-left: 0;
 }
 
 .sendReview {
   display: flex;
-  flex: 1;
+  flex-direction: row;
   gap: .7rem;
   align-items: start;
-  justify-content: space-between;
-  padding: 1rem;
-  border-radius: 7px;
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: max-content;
+  margin: 8px 0;
 }
+
+@media screen and (max-width: 800px) {
+  
+  .sendReview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    align-items: start;
+  }   
+  
+  .main-page {
+    width: 100%;
+  }
+}
+
 </style>

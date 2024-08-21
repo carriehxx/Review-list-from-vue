@@ -1,5 +1,4 @@
 <!-- this file aims to handle the new submission of review for current user -->
-<!-- 基本可以不用动了，现在这个可以更新reviews的dataset以及total review number -->
 
 <script setup>
 import { ref } from 'vue'
@@ -10,7 +9,8 @@ const props = defineProps({
         default: () => [] 
     },
     currentUser: Object,
-    totalReviewNum: Number
+    totalReviewNum: Number,
+    isMobile: Boolean
 })
 
 const emit = defineEmits(['updateTotalReviewNum']);
@@ -24,7 +24,6 @@ function getImageSrc(imagePaths) {
     }
 
 function submitMsg(){
-    // if condiition, when there is an nonempty input being sumitted
 
     if (inputMsg.value.trim() !== ''){
         const newReview = {
@@ -37,7 +36,6 @@ function submitMsg(){
         };
 
         props.reviews.push(newReview);
-        // update the total review number
         emit('updateTotalReviewNum', props.totalReviewNum + 1);
         inputMsg.value = ''; //恢复
     };
@@ -46,36 +44,63 @@ function submitMsg(){
 </script>
 
 <template>
-    <li>
+    <li v-if="isMobile">
+        <textarea @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Add a comment ..."></textarea>
+        <div class="bottom">
+            <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+            <button  @click="submitMsg" class="send">SEND</button>
+        </div>
+        
+    </li>
+
+    <li v-else>
         <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
-        <input @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Add a comment ...">
+        <textarea @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Add a comment ..."></textarea>
         <button  @click="submitMsg" class="send">SEND</button>
     </li>
 </template>
 
 <style scoped>
 .commentInput {
-    height: 80%;
+    min-height: 4vh;
+    height: 100%;
     flex: 1;
-    /* border-radius: 10px; */
     padding: 1rem;
     cursor: pointer;
+    justify-content: start;
+    align-items: start;
+    border-color: var(--clr-Vlight-gra);
+    box-shadow: 0 0 1px 0;
 }
 
 .commentInput::placeholder {
-    /* flex: 1; */
     color: rgb(159, 159, 211);
-    /* display: flex; */
-    font-size: 1rem;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
     line-height: 1.5;
+    justify-content: start;
+    align-items: start;
+    
 }
 
 .send {
-    background-color: rgb(94, 28, 155);
-    padding: 1rem;
-    width: 8rem;
-    color: azure;
+    background-color: var(--clr-moderate-blue);
+    padding: 1.2rem;
+    color: white;
 }
 
+@media screen and (max-width: 800px) {
+    
+    .commentInput {
+        text-align: left;
+        height: auto;
+        width: 100%;
+    }
+    
+    .send {
+        padding: .5rem 1.2rem;
+    }
+
+}
 
 </style>

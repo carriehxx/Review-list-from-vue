@@ -10,12 +10,11 @@ const props = defineProps({
         default: () => {} 
     },
     currentUser: Object,
-    totalReviewNum: Number
+    totalReviewNum: Number,
+    isMobile: Boolean
 });
 
-    // 传回一个更新的totalReviewNumber
 const emit = defineEmits(['updateTotalReviewNum','idDeleted']);
-// 在父组件中totalReviewNum是ref类型，带一个.value 读取或更新它的值
 function updateTotalReviewNum(newTotal) {
     emit('updateTotalReviewNum', newTotal);
 }
@@ -34,8 +33,8 @@ function deleteReview(event) {
     const indexToDelete = props.reviews.findIndex(review => review.id === event);
     if (indexToDelete !== -1) {
         props.reviews.splice(indexToDelete, 1);
-        emit('idDeleted', event);  // 通知父组件评论已被删除
-        emit('updateTotalReviewNum', props.totalReviewNum - 1);  // 更新评论总数
+        emit('idDeleted', event); 
+        emit('updateTotalReviewNum', props.totalReviewNum - 1); 
     }
 }
     
@@ -44,15 +43,17 @@ function deleteReview(event) {
 <!-- ============================================================== -->
 
 <template>
-        <li> <!-- each review id is unique -->
+        <div> <!-- each review id is unique -->
             <reviewBlock 
                 class="userReviewBlock" 
                 :eachComment="props.reviews" 
                 :currentUser="props.currentUser" 
                 :totalReviewNum="props.totalReviewNum"
+                :isMobile="isMobile"
                 @click="replyListToggle"
                 @updateTotalReviewNum="updateTotalReviewNum"
-                @deleteReview="deleteReview">
+                @deleteReview="deleteReview"
+                @toggleSubList="replyToggles=true">
             </reviewBlock>
 
             <ul class="reviewContainer" v-show="replyToggles" v-if="containReply(props.reviews)">
@@ -62,37 +63,51 @@ function deleteReview(event) {
                         :reviews="reply" 
                         :currentUser="props.currentUser" 
                         :totalReviewNum="props.totalReviewNum"
+                        :isMobile="isMobile"
                         @updateTotalReviewNum="updateTotalReviewNum"> 
                     </treeReview>
                 </li>
             </ul>
-        </li>
+        </div>
 </template>
 
-<!-- =============================================================== -->
 
 <style scoped>
 
 .userReviewBlock {
-    /* width: 80vw; */
     display: flex;
     flex-direction: column;
-    /* flex: 0 1 auto; */
     border-radius: 10px;
+    gap: 0rem;
+    width: 100%;
 }
 
 li {
     position: relative;
+    padding-left: 2rem;
     gap: .5rem;
 }
 
-/* li::before {
+
+li::before {
     content: "";
     position: absolute;
-    left: .7rem;
-    width: 1px;
-    background-color: hsl(--clr-grayish-blue);
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--clr-light-gray);
+}
 
-} */
+@media screen and (max-width: 800px) {
+    .userReviewBlock {
+        width: 100%;
+        gap: 0rem;
+    }
+    li {
+        padding-left: 1rem;
+        gap: .5rem;
+    }
+}
 
 </style>
