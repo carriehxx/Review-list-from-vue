@@ -1,25 +1,28 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+:root {
+  --font-family: "Rubik", sans-serif;
+  --font-size: 16px;
+  --font-weight-1: 400;
+  --font-weight-2: 500;
+  --font-weight-3: 700;
+  
+
+  --clr-moderate-blue: hsl(238, 40%, 52%);
+  --clr-soft-red: hsl(358, 79%, 66%);
+  --clr-light-grayish-blue: hsl(239, 57%, 85%);
+  --clr-pale-red: hsl(357, 100%, 86%);
+
+  --clr-dark-blue: hsl(212, 24%, 26%);
+  --clr-grayish-blue: hsl(211, 10%, 45%);
+  --clr-light-gray: hsl(223, 19%, 93%);
+  --clr-Vlight-gray: hsl(228, 33%, 97%);
+  --clr-white: hsl(0, 0%, 100%);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
@@ -28,6 +31,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--clr-Vlight-gray);
 }
 
 h1 {
@@ -38,24 +42,61 @@ h1 {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  padding: 0.4em 1.2em;
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-2);
+  font-family: var(--font-family);
+  background-color: var(--clr-moderate-blue);
+  gap: .5rem;
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-color: var(--clr-grayish-blue);
 }
 
-.card {
-  padding: 2em;
+button:focus,
+button:focus-visible {
+  outline: 4px auto var(--clr-moderate-blue);
+}
+
+
+.userReviewBlock,
+.sendReview {
+  background-color: var(--clr-white);
+  gap: .5rem;
+}
+
+input {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-1);
+  color: var(--clr-dark-blue);
+  padding: .7rem 1rem;
+  line-height: 1.5;
+  text-align: justify;
+  border-radius: 8px;
+}
+
+input:focus,
+input:focus-visible {
+  outline: 4px auto var(--clr-moderate-blue);
+}
+
+p {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-1);
+  color: var(--clr-grayish-blue);
+  /* padding: .7rem; */
+  line-height: 1.5;
+  text-align: justify;
+}
+
+li {
+  list-style-type: none;
+  margin-left: 1.5rem;
 }
 
 #app {

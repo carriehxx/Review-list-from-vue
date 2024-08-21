@@ -9,7 +9,7 @@
         totalReviewNum: Number
     });
 
-    const emit = defineEmits(['updateTotalReviewNum']);
+    const emit = defineEmits(['updateTotalReviewNum','updateState']);
 
     const inputMsg = ref('@'+ props.reviews.user.username + ', ' );
     const publishDate = new Date();
@@ -22,7 +22,7 @@
     // submitting the message and emit back the updated total number of reviews
     function submitMsg(){
         // if condition, when there is an nonempty input being sumitted
-        if (inputMsg.value !== ''){
+        if (inputMsg.value.trim() !== ''){
             const newReplyReview = {
                 "id": props.totalReviewNum + 1,
                 "content": inputMsg.value,
@@ -32,20 +32,27 @@
                 "user": props.currentUser,
                 "replies": []
             };
-
+            
+        if (props.reviews.replies) {
             props.reviews.replies.push(newReplyReview);
+        } else {
+            props.reviews.replies = [newReplyReview]; 
+        }
+
+            
             // update the total review number
             emit('updateTotalReviewNum', props.totalReviewNum + 1 );
+            emit('updateState', true)
         };
     }
 
 </script>
 
 <template>
-    <div>
+    <div  @click.stop>
         <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
-        <input type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Please write your comment here ...">
-        <button @click.stop="submitMsg()" class="reply">REPLY</button>
+        <input @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Please write your comment here ...">
+        <button @click.stop="submitMsg" class="reply">REPLY</button>
     </div>
 </template>
 

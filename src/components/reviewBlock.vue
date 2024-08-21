@@ -3,8 +3,9 @@
  including the content, the functional buttons and the reply form submission-->
 
 <script setup>
-import {  reactive, ref, watch, computed } from 'vue'
+import { ref } from 'vue'
 import replyForm from './review/replyForm.vue'
+import modal from './review/modal.vue'
 
     const props = defineProps({
         eachComment: Object,
@@ -16,8 +17,7 @@ import replyForm from './review/replyForm.vue'
     const emit = defineEmits(['updateTotalReviewNum','deleteReview']);
     // 在父组件中totalReviewNum是ref类型，带一个.value 读取或更新它的值
     function updateTotalReviewNum(newTotal) {
-        props.totalReviewNum.value = newTotal;
-        emit('updateTotalReviewNum', props.totalReviewNum.value)
+        emit('updateTotalReviewNum', newTotal);
     }
 
     function getImageSrc(imagePaths) {
@@ -30,30 +30,38 @@ import replyForm from './review/replyForm.vue'
         showReplyForm.value = !showReplyForm.value;
     }
 
+    const showDeleteModal = ref(false);
+
     function deleteReview(){
         emit('deleteReview', props.eachComment.id)
     }
 
     const editReview = ref(false);
+    const editEmpty = ref(false);
     const updatedContent = ref( props.eachComment.content );
     function updateReview(){
-        props.eachComment.content = updatedContent.value;
-        editReview.value = !editReview.value;
+        if (updatedContent.value.trim() !== ''){
+            props.eachComment.content = updatedContent.value;
+            editReview.value = !editReview.value;
+        } else {
+            editEmpty.value = true;
+            updatedContent.value = props.eachComment.content;
+        }
+        
     }
     
-
-
 </script>
 
 <template>
     <div>
         <div class="reviewContainer">
             <div class="likeInfo">
-                <button type="button" @click="props.eachComment.score++">
+                <!-- 需要考虑一下传回数据 -->
+                <button type="button" @click.stop="props.eachComment.score++">
                     <img src="../assets/images/icon-plus.svg" alt="plus-sign">
                 </button>
                 <p>{{ props.eachComment.score }}</p>
-                <button type="button" @click="props.eachComment.score--">
+                <button type="button" @click.stop="props.eachComment.score--">
                     <img src="../assets/images/icon-minus.svg" alt="minus-sign">
                 </button>
             </div>
@@ -69,9 +77,16 @@ import replyForm from './review/replyForm.vue'
                         </div>
 
                         <div class="reviewOwnerFunc">
-                            <button class="delete" @click.stop="deleteReview">
+                            <button class="delete" @click.stop="showDeleteModal = true">
                                 <img src="../assets/images/icon-delete.svg" alt="delete-icon"> Delete
                             </button>
+                            <Teleport to="body">
+                                <modal :show="showDeleteModal" :purpose="'delete'" @close="showDeleteModal = false" @delete="deleteReview">
+                                    <template #header>
+                                        <h3>Delete comment</h3>
+                                    </template>
+                                </modal>
+                            </Teleport>
                             <button class="edit"  @click.stop="editReview = !editReview">
                                 <img src="../assets/images/icon-edit.svg" alt="edit-icon"> Edit
                             </button>
@@ -81,8 +96,15 @@ import replyForm from './review/replyForm.vue'
                     </div>
                     
                     <div class="editBlock" v-if="editReview">
-                        <input type="text" v-model="updatedContent">
-                        <button class="update" @click="updateReview">UPDATE</button>
+                        <input @keyup.enter="updateReview" type="text" v-model="updatedContent">
+                        <button class="update" @click.stop="updateReview">UPDATE</button>
+                        <Teleport to="body">
+                                <modal :show="editEmpty" :purpose="'edit'" @close="editEmpty = false" @delete="deleteReview">
+                                    <template #header>
+                                        <h3>Empty content</h3>
+                                    </template>
+                                </modal>
+                            </Teleport>
                     </div>
 
                     <div class="reviewContent" v-else>
@@ -99,7 +121,7 @@ import replyForm from './review/replyForm.vue'
                             <p class="publishDate"><span>{{ props.eachComment.createdAt }}</span></p>
                         </div>
 
-                        <button class="reply" @click.stop="replyToggle" @updateTotalReviewNum="updateTotalReviewNum" >
+                        <button class="reply" @click.stop="replyToggle">
                             <img src="../assets/images/icon-reply.svg" alt="reply-icon"> Reply
                         </button>
                     </div>
@@ -115,7 +137,9 @@ import replyForm from './review/replyForm.vue'
             class="replyForm" 
             :reviews="props.eachComment" 
             :currentUser="props.currentUser" 
+            :totalReviewNum="props.totalReviewNum"
             v-if="showReplyForm" 
+            @updateState="replyToggle"
             @updateTotalReviewNum="updateTotalReviewNum">
         </replyForm >
     </div>

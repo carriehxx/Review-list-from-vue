@@ -1,7 +1,6 @@
 <!-- this file aims to handle the new submission of review for current user -->
 <!-- 基本可以不用动了，现在这个可以更新reviews的dataset以及total review number -->
 
-
 <script setup>
 import { ref } from 'vue'
 
@@ -27,8 +26,7 @@ function getImageSrc(imagePaths) {
 function submitMsg(){
     // if condiition, when there is an nonempty input being sumitted
 
-    
-    if (inputMsg.value !== ''){
+    if (inputMsg.value.trim() !== ''){
         const newReview = {
             "id": props.totalReviewNum + 1,
             "content": inputMsg.value,
@@ -41,17 +39,18 @@ function submitMsg(){
         props.reviews.push(newReview);
         // update the total review number
         emit('updateTotalReviewNum', props.totalReviewNum + 1);
+        inputMsg.value = ''; //恢复
     };
 }
 
 </script>
 
 <template>
-    <div>
+    <li>
         <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
-        <input type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Please write your comment here ...">
-        <button @click.stop="submitMsg()" class="send">SEND</button>
-    </div>
+        <input @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Add a comment ...">
+        <button  @click="submitMsg" class="send">SEND</button>
+    </li>
 </template>
 
 <style scoped>

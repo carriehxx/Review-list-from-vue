@@ -1,77 +1,72 @@
 <!-- this vue aims to establish the tree structure of the review list -->
 
 <script setup>
-    import { ref } from 'vue';
-    import reviewBlock from './reviewBlock.vue'
-    
-    const props = defineProps({
+import { ref } from 'vue';
+import reviewBlock from './reviewBlock.vue'
+
+const props = defineProps({
     reviews: {
-        type: Array,
-        default: () => [] 
+        type: Object,
+        default: () => {} 
     },
     currentUser: Object,
     totalReviewNum: Number
 });
 
     // 传回一个更新的totalReviewNumber
-    const emit = defineEmits(['updateTotalReviewNum','idDeleted']);
-    // 在父组件中totalReviewNum是ref类型，带一个.value 读取或更新它的值
-    function updateTotalReviewNum(newTotal) {
-        props.totalReviewNum.value = newTotal;
-    }
+const emit = defineEmits(['updateTotalReviewNum','idDeleted']);
+// 在父组件中totalReviewNum是ref类型，带一个.value 读取或更新它的值
+function updateTotalReviewNum(newTotal) {
+    emit('updateTotalReviewNum', newTotal);
+}
 
-    const replyToggles = ref({});
-    function showReplyToggle(id){
-        if (replyToggles.value[id] === undefined) {
-            replyToggles.value[id] = true;
-        } else {
-            replyToggles.value[id] = !replyToggles.value[id];
-        }
-    }
+const replyToggles = ref(true);
+function replyListToggle(){
+    replyToggles.value = !replyToggles.value;
+}
 
-    function containReply(mainReview) {
-        // true if contains replies, else false
-        return mainReview.replies && mainReview.replies.length > 0;
-    }
+function containReply(mainReview) {
+    // true if contains replies, else false
+    return mainReview.replies && mainReview.replies.length > 0;
+}
 
-    function deleteReview(event) {
-        const indexToDelete = props.reviews.findIndex(review => review.id === event);
-        props.reviews.splice(indexToDelete,1);
-        // emit('idDeleted', event)
-        // emit('updateTotalReviewNum', props.totalReviewNum.value - 1)
+function deleteReview(event) {
+    const indexToDelete = props.reviews.findIndex(review => review.id === event);
+    if (indexToDelete !== -1) {
+        props.reviews.splice(indexToDelete, 1);
+        emit('idDeleted', event);  // 通知父组件评论已被删除
+        emit('updateTotalReviewNum', props.totalReviewNum - 1);  // 更新评论总数
     }
+}
     
-            
-
-
 </script>
 
 <!-- ============================================================== -->
 
 <template>
-    <div>
-        <li v-for="mainReview in props.reviews" :key="mainReview.id"> <!-- each review id is unique -->
-        <!-- <reviewBlock class="userReviewBlock" @click="showReplyToggle(mainReview.id)" :eachComment="mainReview" :currentUser="props.currentUser" ></reviewBlock> -->
+        <li> <!-- each review id is unique -->
             <reviewBlock 
                 class="userReviewBlock" 
-                :eachComment="mainReview" 
+                :eachComment="props.reviews" 
                 :currentUser="props.currentUser" 
                 :totalReviewNum="props.totalReviewNum"
-                @click="showReplyToggle(mainReview.id)"
+                @click="replyListToggle"
                 @updateTotalReviewNum="updateTotalReviewNum"
                 @deleteReview="deleteReview">
             </reviewBlock>
-            <!-- <ul class="reviewContainer" v-show="showReplyStates[mainReview.id]" v-if="containReply(mainReview)"> -->
-            <ul class="reviewContainer"  v-show="replyToggles[mainReview.id]" v-if="containReply(mainReview)">
-                <treeReview 
-                    class="reviewBlocks" 
-                    :reviews="mainReview.replies" 
-                    :currentUser="props.currentUser" 
-                    :totalReviewNum="props.totalReviewNum"
-                    @updateTotalReviewNum="updateTotalReviewNum"> </treeReview>
+
+            <ul class="reviewContainer" v-show="replyToggles" v-if="containReply(props.reviews)">
+                <li v-for="reply in props.reviews.replies" :key="reply.id"> 
+                    <treeReview 
+                        class="reviewBlocks" 
+                        :reviews="reply" 
+                        :currentUser="props.currentUser" 
+                        :totalReviewNum="props.totalReviewNum"
+                        @updateTotalReviewNum="updateTotalReviewNum"> 
+                    </treeReview>
+                </li>
             </ul>
         </li>
-    </div>
 </template>
 
 <!-- =============================================================== -->
@@ -83,12 +78,21 @@
     display: flex;
     flex-direction: column;
     /* flex: 0 1 auto; */
-    background-color: bisque;
     border-radius: 10px;
 }
 
 li {
-    list-style: none;
+    position: relative;
+    gap: .5rem;
 }
+
+/* li::before {
+    content: "";
+    position: absolute;
+    left: .7rem;
+    width: 1px;
+    background-color: hsl(--clr-grayish-blue);
+
+} */
 
 </style>
