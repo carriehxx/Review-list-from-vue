@@ -16,7 +16,7 @@
     const publishDate = new Date();
 
     function getImageSrc(imagePaths) {
-            const correctedpath = imagePaths.replace("./","../src/assets/");
+            const correctedpath = imagePaths.replace("./","../assets/");
             return correctedpath;
         }
 
