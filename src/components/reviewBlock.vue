@@ -272,7 +272,7 @@ import modal from './review/modal.vue'
     place-items: center;
     gap: 0;
     border-radius: 10px;
-    max-height: 8vh;
+
 }
 
 .youTag {
