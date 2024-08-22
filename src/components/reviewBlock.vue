@@ -20,7 +20,7 @@ import modal from './review/modal.vue'
     }
 
     function getImageSrc(imagePaths) {
-        const correctedpath = imagePaths.replace("./","/src/assets/");
+        const correctedpath = imagePaths.replace("./","./src/assets/");
         return correctedpath;
     }
 

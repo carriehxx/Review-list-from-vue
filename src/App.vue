@@ -12,17 +12,17 @@ dataStore.value = datastore;
 
 const totalReviewNum = ref(0);
 function allReviews(dataset) {
-  if (!dataset || dataset.length === 0) {
-    return 0;
-  }
-  let total = 0;
-  for (let i = 0; i < dataset.length; i++) {
-    total += 1;
-    if (dataset[i].replies && dataset[i].replies.length > 0) {
-      total += allReviews(dataset[i].replies);
+    if (!dataset || dataset.length === 0) {
+      return 0;
     }
-  }
-  return total;
+    let total = 0;
+    for (let i = 0; i < dataset.length; i++) {
+      total += 1;
+      if (dataset[i].replies && dataset[i].replies.length > 0) {
+        total += allReviews(dataset[i].replies);
+      }
+    }
+    return total;
 }
 
 
