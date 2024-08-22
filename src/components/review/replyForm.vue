@@ -49,7 +49,7 @@
 
 <template>
     <div  @click.stop v-if="!isMobile">
-        <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+        <img :src="getImageSrc(props.currentUser.image.webp)" alt="currentUserImg">
         <textarea
             @keyup.enter="submitMsg" 
             type="text" 
@@ -67,7 +67,7 @@
             v-model.trim="inputMsg" >
         </textarea>
         <div class="bottom">
-            <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+            <img :src="getImageSrc(props.currentUser.image.webp)" alt="currentUserImg">
             <button @click.stop="submitMsg" class="reply">REPLY</button>
         </div>
     </div>
