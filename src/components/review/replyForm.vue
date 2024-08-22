@@ -16,8 +16,8 @@
     const publishDate = new Date();
 
     function getImageSrc(imagePaths) {
-            const correctedpath = imagePaths.replace("./","../assets/");
-            return correctedpath;
+            // const correctedpath = imagePaths.replace("./","../assets/");
+            return imagePaths;
         }
 
     // submitting the message and emit back the updated total number of reviews

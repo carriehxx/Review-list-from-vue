@@ -19,8 +19,8 @@ const inputMsg = ref('');
 const publishDate = new Date();
 
 function getImageSrc(imagePaths) {
-        const correctedpath = imagePaths.replace("./","../assets/");
-        return correctedpath;
+        // const correctedpath = imagePaths.replace("./","../assets/");
+        return imagePaths;
     }
 
 function submitMsg(){
