@@ -15,10 +15,10 @@
     const inputMsg = ref('@'+ props.reviews.user.username + ', ' );
     const publishDate = new Date();
 
-    function getImageSrc(imagePaths) {
-            const correctedpath = imagePaths.replace("./","/Reviwe-list-from-vue/src/assets/");
+    {/* function getImageSrc(imagePaths) {
+            const correctedpath = imagePaths.replace("./","/src/assets/");
             return correctedpath;
-        }
+        } */}
 
     // submitting the message and emit back the updated total number of reviews
     function submitMsg(){
@@ -49,7 +49,7 @@
 
 <template>
     <div  @click.stop v-if="!isMobile">
-        <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+        <img :src="props.currentUser.image.webp" alt="currentUserImg">
         <textarea
             @keyup.enter="submitMsg" 
             type="text" 
@@ -67,7 +67,7 @@
             v-model.trim="inputMsg" >
         </textarea>
         <div class="bottom">
-            <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+            <img :src="props.currentUser.image.webp" alt="currentUserImg">
             <button @click.stop="submitMsg" class="reply">REPLY</button>
         </div>
     </div>

@@ -18,10 +18,10 @@ const emit = defineEmits(['updateTotalReviewNum']);
 const inputMsg = ref('');
 const publishDate = new Date();
 
-function getImageSrc(imagePaths) {
-        const correctedpath = imagePaths.replace("./","/Reviwe-list-from-vue/src/assets/");
+{/* function getImageSrc(imagePaths) {
+        const correctedpath = imagePaths.replace("./","/src/assets/");
         return correctedpath;
-    }
+    } */}
 
 function submitMsg(){
 
@@ -47,14 +47,14 @@ function submitMsg(){
     <li v-if="isMobile">
         <textarea @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Add a comment ..."></textarea>
         <div class="bottom">
-            <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+            <img :src="props.currentUser.image.webp" alt="currentUserImg">
             <button  @click="submitMsg" class="send">SEND</button>
         </div>
         
     </li>
 
     <li v-else>
-        <img :src="getImageSrc(props.currentUser.image.png)" alt="currentUserImg">
+        <img :src="props.currentUser.image.webp" alt="currentUserImg">
         <textarea @keyup.enter="submitMsg" type="text" class="commentInput" v-model.trim="inputMsg" placeholder="Add a comment ..."></textarea>
         <button  @click="submitMsg" class="send">SEND</button>
     </li>
