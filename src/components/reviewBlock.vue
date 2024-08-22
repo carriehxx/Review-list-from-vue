@@ -19,10 +19,10 @@ import modal from './review/modal.vue'
         emit('updateTotalReviewNum', newTotal);
     }
 
-    {/* function getImageSrc(imagePaths) {
+    function getImageSrc(imagePaths) {
         const correctedpath = imagePaths.replace("./","/src/assets/");
         return correctedpath;
-    } */}
+    }
 
     const showReplyForm = ref(false);
     function replyToggle(){
@@ -73,7 +73,7 @@ import modal from './review/modal.vue'
                 <div class="ownReview" v-if="props.currentUser.username === props.eachComment.user.username" >
                     <div class="reviewPerson">
                         <div class="personInfo">
-                            <img :src="props.eachComment.user.image.webp" alt="personImage">
+                            <img :src="getImageSrc(props.eachComment.user.image.png)" alt="personImage">
                             <p class="userName"><span>{{ props.eachComment.user.username }}</span></p>
                             <p class="youTag">you</p>
                             <p class="publishDate"><span>{{ props.eachComment.createdAt }}</span></p>
@@ -122,7 +122,7 @@ import modal from './review/modal.vue'
                 <div class="othersReview" v-else>
                     <div class="reviewPerson">
                         <div class="personInfo">
-                            <img :src="props.eachComment.user.image.webp" alt="personImage">
+                            <img :src="getImageSrc(props.eachComment.user.image.png)" alt="personImage">
                             <p class="userName"><span>{{ props.eachComment.user.username }}</span></p>
                             <p class="publishDate"><span>{{ props.eachComment.createdAt }}</span></p>
                         </div>
@@ -146,7 +146,7 @@ import modal from './review/modal.vue'
                 <div class="ownReview" v-if="props.currentUser.username === props.eachComment.user.username" >
                     <div class="reviewPerson">
                         <div class="personInfo">
-                            <img :src="props.eachComment.user.image.webp" alt="personImage">
+                            <img :src="getImageSrc(props.eachComment.user.image.png)" alt="personImage">
                             <p class="userName"><span>{{ props.eachComment.user.username }}</span></p>
                             <p class="youTag">you</p>
                             <p class="publishDate"><span>{{ props.eachComment.createdAt }}</span></p>
@@ -175,7 +175,7 @@ import modal from './review/modal.vue'
                 <div class="othersReview" v-else>
                     <div class="reviewPerson">
                         <div class="personInfo">
-                            <img :src="props.eachComment.user.image.webp" alt="personImage">
+                            <img :src="getImageSrc(props.eachComment.user.image.png)" alt="personImage">
                             <p class="userName"><span>{{ props.eachComment.user.username }}</span></p>
                             <p class="publishDate"><span>{{ props.eachComment.createdAt }}</span></p>
                         </div>
