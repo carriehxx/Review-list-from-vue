@@ -119,24 +119,20 @@ const handleUpdateState = () => {
                   <span>{{ props.eachComment.createdAt }}</span>
                 </p>
               </div>
-
-              <div class="reviewOwnerFunc">
-                <button
-                  class="delete"
-                  @click.stop="showDeleteModal = true"
-                  v-if="!editReview"
-                >
-                  <img
-                    src="../assets/images/icon-delete.svg"
-                    alt="delete-icon"
-                  />
-                  Delete
-                </button>
-                <button class="edit" @click.stop="editReview = !editReview">
-                  <img src="../assets/images/icon-edit.svg" alt="edit-icon" />
-                  Edit
-                </button>
-              </div>
+            </div>
+            <div class="reviewOwnerFunc">
+              <button
+                class="delete"
+                @click.stop="showDeleteModal = true"
+                v-if="!editReview"
+              >
+                <img src="../assets/images/icon-delete.svg" alt="delete-icon" />
+                Delete
+              </button>
+              <button class="edit" @click.stop="editReview = !editReview">
+                <img src="../assets/images/icon-edit.svg" alt="edit-icon" />
+                Edit
+              </button>
             </div>
 
             <Teleport to="body">
@@ -161,7 +157,6 @@ const handleUpdateState = () => {
               ></textarea>
               <button class="update" @click.stop="updateReview">UPDATE</button>
               <Teleport to="body">
-                // this is the modal for editing content is empty
                 <modal
                   :show="editEmpty"
                   :purpose="'edit'"
@@ -387,6 +382,17 @@ const handleUpdateState = () => {
   place-items: center;
   gap: 0;
   border-radius: 10px;
+}
+
+.ownReview .reviewPerson {
+  width: 100%;
+}
+
+.upperReviewBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .youTag {

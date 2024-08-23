@@ -129,5 +129,9 @@ li::before {
     padding-left: 1rem;
     gap: 0.5rem;
   }
+
+  ul {
+    padding-inline-start: 20px;
+  }
 }
 </style>
